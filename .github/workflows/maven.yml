@@ -24,10 +24,10 @@ jobs:
       - name: Invoke Jenkins Deployment Job
         uses: appleboy/jenkins-action@master
         with:
-          url: http://172.31.45.228:8080
+          url: http://172.31.45.228:8080/
           user: admin
           token: ${{ secrets.JENKINS_TOKEN }}
-          job: TomcatDeployment
+          job: 1.Compile
         env:
           JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.10-7/x64
           JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.10-7/x64
