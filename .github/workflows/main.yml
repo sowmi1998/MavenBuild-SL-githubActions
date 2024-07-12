@@ -1,0 +1,33 @@
+---
+name: CICD piepline for Git-hub actions
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+jobs:
+  buildandDeploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: connect to lab and deploy code on tomcat9
+        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+        with:
+          host: ${{ secrets.LAB_HOSTNAME }}
+          user: ${{ secrets.LAB_USERNAME }}
+          pass: ${{ secrets.LAB_PASSWORD }}
+          port: ${{ secrets.LAB_PORT }}
+          connect_timeout: 10s
+          scp: |
+            ./target/*.war => /tmp/
+          last_ssh: |
+            ls -lart /tmp
+      - name: Invoke Jenkins Deployment Job
+        uses: appleboy/jenkins-action@master
+        with:
+          url: http://172.31.45.228:8080/
+          user: admin
+          token: ${{ secrets.JENKINS_TOKEN }}
+          job: 1.Compile
+        env:
+          JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.10-7/x64
+          JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.10-7/x64
