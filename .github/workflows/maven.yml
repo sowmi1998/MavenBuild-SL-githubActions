@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch: null
 jobs:
   buildandDeploy:
     runs-on: ubuntu-latest
@@ -28,3 +27,5 @@ jobs:
           user: admin
           token: ${{ secrets.JENKINS_TOKEN }}
           job: TomcatDeployment
+          wait: "true"
+          timeout: "1000"
