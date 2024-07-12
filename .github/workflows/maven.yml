@@ -1,4 +1,4 @@
----
+
 name: CICD piepline for Git hub actions
 on:
   push:
@@ -19,3 +19,19 @@ jobs:
           cache: maven
       - name: Build with maven
         run: mvn -B package --file pom.xml
+      - name: connect to lab and deploy code on tomcat9
+        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+        with:
+          host: ${{ secrets.LAB_HOSTNAME }}
+          user: ${{ secrets.LAB_USERNAME }}
+          pass: ${{ secrets.LAB_PASSWORD }}
+          port: ${{ secrets.LAB_PORT }}
+          connect_timeout: 10s
+          first_ssh: >
+            sudo chmod 777 /var/lib/tomcat9/webapps  #give write permission to
+            uplaod the war file into tomcat
+          scp: >
+            './target/*war' => /var/lib/tomcat9/webapps #gte the war file from the
+            current git hub repo package
+          last_ssh: |
+            sudo systemctl restart tomcat9 #restart tomcat
