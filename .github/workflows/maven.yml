@@ -1,5 +1,5 @@
 ---
-name: CICD piepline for Git hub actions
+name: CICD piepline for Git-hub actions
 on:
   push:
     branches:
