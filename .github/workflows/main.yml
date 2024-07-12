@@ -9,7 +9,7 @@ jobs:
   buildandDeploy:
     runs-on: ubuntu-latest
     steps:
-      - name: connect to lab and deploy code on tomcat9
+      - name: connect to lab
         uses: cross-the-world/ssh-scp-ssh-pipelines@latest
         with:
           host: ${{ secrets.LAB_HOSTNAME }}
