@@ -1,0 +1,21 @@
+---
+name: CICD piepline for Git hub actions
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: null
+jobs:
+  buildandDeploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone the repo
+        uses: actions/checkout@v4
+      - name: Setup JDK and maven
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "11"
+          cache: maven
+      - name: Build with maven
+        run: mvn -B package --file pom.xml
