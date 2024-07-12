@@ -1,4 +1,4 @@
-
+---
 name: CICD piepline for Git hub actions
 on:
   push:
@@ -27,11 +27,14 @@ jobs:
           pass: ${{ secrets.LAB_PASSWORD }}
           port: ${{ secrets.LAB_PORT }}
           connect_timeout: 10s
-          first_ssh: >
-            sudo chmod 777 /var/lib/tomcat9/webapps  #give write permission to
-            uplaod the war file into tomcat
-          scp: >
-            './target/*war' => /var/lib/tomcat9/webapps #gte the war file from the
-            current git hub repo package
+          scp: |
+            ./target/*.war => /tmp/
           last_ssh: |
-            sudo systemctl restart tomcat9 #restart tomcat
+            ls -lart /tmp
+      - name: Invoke Jenkins Deployment Job
+        uses: appleboy/jenkins-action@master
+        with:
+          url: http://104.198.139.137:8080
+          user: admin
+          token: ${{ secrets.JENKINS_TOKEN }}
+          job: TomcatDeployment
